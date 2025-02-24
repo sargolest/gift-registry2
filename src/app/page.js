@@ -1,15 +1,25 @@
-import React, { Suspense } from 'react';
-import LoginForm from '@/components/Auth/LoginForm';
-import RegisterForm from '@/components/Auth/RegisterForm';
-import CheckAuthServer from '@/components/Auth/CheckAuthServer'; // اضافه کردن کامپوننت جدید
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import LoginForm from "@/components/Auth/LoginForm";
+import RegisterForm from "@/components/Auth/RegisterForm";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push("/dashboard");
+    }
+  }, [session, router]);
+
+  if (status === "loading") {
+    return <p>Loading...</p>; // لودینگ صفحه
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <Suspense fallback={null}>
-        <CheckAuthServer /> {/* بررسی سشن */}
-      </Suspense>
-
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden md:max-w-2xl">
         <div className="p-8">
           <div className="text-center mb-8">
