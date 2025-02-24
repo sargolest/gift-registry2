@@ -1,18 +1,15 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import LoginForm from '@/components/Auth/LoginForm';
 import RegisterForm from '@/components/Auth/RegisterForm';
-import { getServerSession } from 'next-auth/next';
-import { redirect } from 'next/navigation';
+import CheckAuthServer from '@/components/Auth/CheckAuthServer'; // اضافه کردن کامپوننت جدید
 
-export default async function HomePage() {
-  const session = await getServerSession();
-  
-  if (session) {
-    redirect('/dashboard');
-  }
-  
+export default function HomePage() {
   return (
     <div className="container mx-auto px-4 py-8">
+      <Suspense fallback={null}>
+        <CheckAuthServer /> {/* بررسی سشن */}
+      </Suspense>
+
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden md:max-w-2xl">
         <div className="p-8">
           <div className="text-center mb-8">
