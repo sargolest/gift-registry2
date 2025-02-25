@@ -1,4 +1,3 @@
-// src/lib/firebase.js
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -12,9 +11,10 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
+// Initialize Firebase
 let firebaseApp;
-let db;
-let auth;
+let db = null;
+let auth = null;
 
 try {
   if (!getApps().length) {
@@ -26,9 +26,10 @@ try {
   db = getFirestore(firebaseApp);
   auth = getAuth(firebaseApp);
 } catch (error) {
-  console.error("Firebase initialization error:", error);
-  // می‌توانید یک مقدار پیش‌فرض برای db و auth تعریف کنید یا آنها را undefined بگذارید
+  console.error("خطا در اتصال به فایربیس:", error);
+  // اینجا متغیرها به صورت null باقی می‌مانند
 }
 
-export { db, auth, firebaseApp };
+export const isFirebaseAvailable = !!db && !!auth;
+export { db, auth };
 export default firebaseApp;
