@@ -12,13 +12,23 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
 let firebaseApp;
+let db;
+let auth;
 
-if (!getApps().length) {
-  firebaseApp = initializeApp(firebaseConfig);
+try {
+  if (!getApps().length) {
+    firebaseApp = initializeApp(firebaseConfig);
+  } else {
+    firebaseApp = getApps()[0];
+  }
+  
+  db = getFirestore(firebaseApp);
+  auth = getAuth(firebaseApp);
+} catch (error) {
+  console.error("Firebase initialization error:", error);
+  // می‌توانید یک مقدار پیش‌فرض برای db و auth تعریف کنید یا آنها را undefined بگذارید
 }
 
-export const db = getFirestore(firebaseApp);
-export const auth = getAuth(firebaseApp);
+export { db, auth, firebaseApp };
 export default firebaseApp;
